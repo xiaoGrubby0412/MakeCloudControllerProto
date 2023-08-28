@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Baidu.VR.Zion.Utils;
 using Com.Baidu.Zion.Proto.Lib;
@@ -35,6 +36,7 @@ namespace Baidu.VR.Zion
 
         private IEnumerator getTaskInfo;
 
+        private Thread updateThread;
         public void Start()
         {
             ResetData();
@@ -63,6 +65,34 @@ namespace Baidu.VR.Zion
             var task = Task.Run(ConnectZionRpcService);
             isGrpcServiceStarted = true;
             task.Wait();
+            updateThread = new Thread(CheckInfo);
+            updateThread.Start();
+        }
+
+        public void CheckInfo()
+        {
+            while (true)
+            {
+                updateThread.Join(1000);
+
+                Task _task = Task.Run(async () =>
+                {
+                    try
+                    {
+                        while (isGrpcServiceStarted && await zionRpcServiceStream.ResponseStream.MoveNext())
+                        {
+                            responseTimer = 0;
+                            var responce = zionRpcServiceStream.ResponseStream.Current;
+                            onRpcResponse?.Invoke(responce);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        LoggerUtils.LogError(e.Message, "CloudControlManager");
+                    }
+                    LoggerUtils.Log($"Grpc disconnected", "CloudControlManager");
+                });
+            }
         }
 
         public void OnDestroy()
@@ -179,15 +209,12 @@ namespace Baidu.VR.Zion
 
         public async void ConnectZionRpcService()
         {
-            Console.WriteLine("66666666666666666666");
             LoggerUtils.Log($"Start connect to: {ChannelAddress}, enviroment: {"123"}", "CloudControlManager");
             channel = new Channel(ChannelAddress, ChannelCredentials.Insecure);
-            Console.WriteLine("55555555555555555");
             ZionRpcServiceClient client = new ZionRpcServiceClient(channel);
             Metadata mData = new Metadata();
             mData.Add("token", GenerateAuth());
             mData.Add("domain", "vr.baidu.com");
-            Console.WriteLine("33333333333333333333");
             zionRpcServiceStream = client.Connect(mData);
 
             MetaInfo metaInfo = new MetaInfo
@@ -195,28 +222,11 @@ namespace Baidu.VR.Zion
                 //ReqId = "",
                 //Timestamp = (ulong)0
             };
-            Console.WriteLine("1111111111111111111111");
-            Task _task = Task.Run(async () =>
-            {
-                try
-                {
-                    while (isGrpcServiceStarted && await zionRpcServiceStream.ResponseStream.MoveNext())
-                    {
-                        responseTimer = 0;
-                        var responce = zionRpcServiceStream.ResponseStream.Current;
-                        onRpcResponse?.Invoke(responce);
-                    }
-                }
-                catch (Exception e)
-                {
-                    LoggerUtils.LogError(e.Message, "CloudControlManager");
-                }
-                LoggerUtils.Log($"Grpc disconnected", "CloudControlManager");
-            });
-            Console.WriteLine("222222222222222222");
+  
             TaskRequest request = new TaskRequest { DeviceInfo = deviceInfo, MetaInfo = metaInfo };
             await zionRpcServiceStream.RequestStream.WriteAsync(request);
             LoggerUtils.Log("Connected Message Sended ..", "CloudControlManager");
+   
             //await zionRpcServiceStream.RequestStream.CompleteAsync();
         }
 
@@ -353,8 +363,8 @@ namespace Baidu.VR.Zion
         private string GenerateAuth()
         {
             //xirang
-             // string ak = "eaa4510ddce04c258b767ce55e69e3d1";
-             // string sk = "1d99291bb0ff4b65a33362c4738804b8";
+             //string ak = "eaa4510ddce04c258b767ce55e69e3d1";
+             //string sk = "1d99291bb0ff4b65a33362c4738804b8";
              //私有化
             string ak = "127a036d0eeb4e33bae281073819df5e";
             string sk = "f17549f6f52a46d1903de01d159fb1b3";
