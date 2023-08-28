@@ -1,0 +1,9 @@
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\bin\Debug\netcoreapp3.1\MakeProtoCs.deps.json
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\bin\Debug\netcoreapp3.1\MakeProtoCs.dll
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\bin\Debug\netcoreapp3.1\MakeProtoCs.pdb
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\obj\Debug\netcoreapp3.1\MakeProtoCs.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\obj\Debug\netcoreapp3.1\MakeProtoCs.AssemblyInfoInputs.cache
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\obj\Debug\netcoreapp3.1\MakeProtoCs.AssemblyInfo.cs
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\obj\Debug\netcoreapp3.1\MakeProtoCs.csproj.CoreCompileInputs.cache
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\obj\Debug\netcoreapp3.1\MakeProtoCs.dll
+C:\Users\wangman09\source\repos\MakeProtoCs\MakeProtoCs\obj\Debug\netcoreapp3.1\MakeProtoCs.pdb

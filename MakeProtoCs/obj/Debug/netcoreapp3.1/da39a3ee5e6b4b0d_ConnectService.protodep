@@ -1,0 +1,2 @@
+obj\Debug\netcoreapp3.1/ConnectService.cs \
+obj\Debug\netcoreapp3.1/ConnectServiceGrpc.cs: ConnectService.proto

@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+package com.baidu.zion.proto.lib;
+
+//option java_multiple_files = true;
+//option java_package = "com.baidu.zion.proto.lib";
+//option java_outer_classname = "GrpcProto";
+
+// ZionRpcService service
+service ZionRpcService
+{
+  // 连接
+  rpc Connect (stream TaskRequest) returns (stream TaskResponse) {
+  }
+
+}
+
+// request device info
+message DeviceInfo {
+  required string device_id = 1;
+  optional string client_version = 2;
+  optional string os_version = 3;
+  optional string platform = 4;
+  optional string channel = 5;
+  optional string stage = 6 [default = "online"];
+  optional string client_hotfix_version = 7;
+}
+
+// request meta info
+message MetaInfo {
+  optional uint64 timestamp = 1;
+  optional string req_id = 2;
+}
+
+message TaskInfo {
+  required string task_name = 1;   // 云控任务编号
+  required string config_name = 2;   // 云控配置名称
+  required int32 task_type = 3;  // 0: 云控url；1：云控content
+  required string task_status = 4;
+  optional string url = 5;
+  optional string content = 6;
+}
+
+
+message TaskRequest {
+  required DeviceInfo device_info = 1;
+  optional MetaInfo meta_info = 2;
+}
+
+// The response message
+message TaskResponse {
+  required string result = 1;
+  required string res_id = 2;
+  optional TaskInfo task_info = 3; // 云控信息
+}
