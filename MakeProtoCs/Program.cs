@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Baidu.VR.Zion;
+using System;
 
 namespace MakeProtoCs
 {
@@ -7,6 +8,9 @@ namespace MakeProtoCs
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+
+            CloudControlManager manager = new CloudControlManager();
+            manager.Start();
         }
     }
 }
